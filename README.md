@@ -1,3 +1,7 @@
+# disclaimer this doesnt work it is a non functional fork of https://github.com/tkh1000/Meshtastic-Meshcore-Dualboot-Heltec-V4-
+
+
+
 # Heltec V4 Dual-Boot(v3): Meshtastic + MeshCore
 
 A dual-boot setup for the **Heltec WiFi LoRa 32 V4** (ESP32-S3, 16 MB flash) that lets you switch between [Meshtastic](https://meshtastic.org) and [MeshCore](https://github.com/meshcore-dev/MeshCore) from a boot-time selector menu on the OLED. **Settings for both firmwares persist across switches.**
