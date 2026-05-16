@@ -1,4 +1,4 @@
-name: Build ESP32-S3 Dualboot Selector
+name: Build ESP32-S3 Selector
 
 on:
   workflow_dispatch:
@@ -9,23 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install ESP-IDF
+      - name: Setup ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
 
-      - name: Build selector
+      - name: Build selector (FIXED PATH)
         shell: bash
         run: |
-          source /opt/esp/idf/export.sh
           cd selector
+          . /opt/esp/idf/export.sh
           idf.py set-target esp32s3
           idf.py build -v
 
-      - name: Upload build artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: selector-build
@@ -33,4 +33,4 @@ jobs:
             selector/build/bootloader/bootloader.bin
             selector/build/partition_table/partition-table.bin
             selector/build/ota_data_initial.bin
-            selector/build/**/*.bin
+            selector/build/*.bin
