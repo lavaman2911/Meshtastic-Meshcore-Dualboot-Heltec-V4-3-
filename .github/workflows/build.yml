@@ -1,4 +1,4 @@
-name: Build ESP32-S3 Dualboot Selector (Stable)
+name: Build ESP32-S3 Dualboot Selector
 
 on:
   workflow_dispatch:
@@ -9,33 +9,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Build ESP-IDF project
-      - name: Build selector
+      - name: Build ESP-IDF project
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
           run_args: |
             cd selector
-
             rm -rf build sdkconfig sdkconfig.old
-
             idf.py set-target esp32s3
             idf.py build
 
-            echo "Build output:"
-            ls -R build
+      # 🔥 FIX: capture correct path dynamically
+      - name: Locate build files
+        run: |
+          find . -name "bootloader.bin"
+          find . -name "partition-table.bin"
+          find . -name "ota_data_initial.bin"
+          find . -name "*selector*.bin"
 
-      # Upload artifacts
-      - name: Upload firmware artifacts
+      # 🔥 Upload using wildcard (NO path guessing)
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: esp32s3-dualboot-selector
+          name: esp32s3-build
           path: |
-            selector/build/bootloader/bootloader.bin
-            selector/build/partition_table/partition-table.bin
-            selector/build/ota_data_initial.bin
-            selector/build/heltec_v4_selector.bin
+            **/bootloader.bin
+            **/partition-table.bin
+            **/ota_data_initial.bin
+            **/*selector*.bin
