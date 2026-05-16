@@ -1,16 +1,17 @@
-# Heltec V4 Dual-Boot Partition Table — 16MB Flash
-# factory (2MB):   Selector app (228KB) — oversized so MeshCore size check passes
-# ota_0 (4.4MB):   MeshCore firmware (1.28MB)
-# ota_1 (5.4MB):   Meshtastic firmware (2.1MB)
-# spiffs (2MB):    Meshtastic LittleFS filesystem
-# mc_spiffs (2MB): MeshCore SPIFFS filesystem — separate label prevents format conflict
+# Heltec V3 Dual-Boot Partition Table — 8MB Flash
+# factory (1.5MB): Selector app + oversized space for MeshCore checks
+# ota_0 (2.25MB):  MeshCore firmware
+# ota_1 (2.25MB):  Meshtastic firmware
+# spiffs (832KB):  Meshtastic filesystem
+# mc_spiffs (1MB): MeshCore filesystem
+# coredump (64KB)
 # Name,      Type, SubType,  Offset,    Size
 nvs,         data, nvs,      0x9000,    0x10000,
 nvs_sel,     data, nvs,      0x19000,   0x3000,
 otadata,     data, ota,      0x1C000,   0x2000,
-factory,     app,  factory,  0x20000,   0x200000,
-ota_0,       app,  ota_0,    0x220000,  0x460000,
-ota_1,       app,  ota_1,    0x680000,  0x570000,
-spiffs,      data, spiffs,   0xBF0000,  0x200000,
-mc_spiffs,   data, spiffs,   0xDF0000,  0x200000,
-coredump,    data, coredump, 0xFF0000,  0x10000,
+factory,     app,  factory,  0x20000,   0x180000,
+ota_0,       app,  ota_0,    0x1A0000,  0x240000,
+ota_1,       app,  ota_1,    0x3E0000,  0x240000,
+spiffs,      data, spiffs,   0x620000,  0x0D0000,
+mc_spiffs,   data, spiffs,   0x6F0000,  0x100000,
+coredump,    data, coredump, 0x7F0000,  0x10000,
