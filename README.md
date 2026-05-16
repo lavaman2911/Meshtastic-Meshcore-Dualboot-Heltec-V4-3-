@@ -73,14 +73,14 @@ Both MeshCore (Companion Radio BLE) and Meshtastic (2.7.21) firmware are include
 **Put device in bootloader mode:** hold **PRG** → plug USB → release **PRG**
 
 ```bash
-esptool.py --chip esp32s3 --port COM<N> --baud 921600 \
-  write_flash --flash_mode dio --flash_freq 80m --flash_size 16MB \
-  0x0000    prebuilt/bootloader.bin         \
-  0x8000    prebuilt/partition-table.bin    \
-  0x1c000   prebuilt/ota_data_initial.bin   \
-  0x20000   prebuilt/selector.bin           \
-  0x220000  meshcore/firmware.bin           \
-  0x680000  meshtastic/firmware.bin
+python -m esptool --chip esp32s3 --port COM<N> --baud 921600 ^
+write_flash --flash_mode dio --flash_freq 80m --flash_size 8MB ^
+0x0000    bootloader.bin ^
+0x8000    partitions.bin ^
+0xE000    ota_data_initial.bin ^
+0x10000   selector.bin ^
+0x190000  meshtastic.bin ^
+0x410000  meshcore.bin
 ```
 
 Or use the included script:
