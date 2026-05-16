@@ -12,16 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup ESP-IDF
+      - name: Build with ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
-
-      - name: Build selector
-        run: |
-          cd selector
-          idf.py set-target esp32s3
-          idf.py build -v
+          command: |
+            cd selector
+            idf.py set-target esp32s3
+            idf.py build -v
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
