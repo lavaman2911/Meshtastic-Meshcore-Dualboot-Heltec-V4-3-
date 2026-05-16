@@ -9,21 +9,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build with ESP-IDF
+      # ESP-IDF setup
+      - name: Setup ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
           command: |
             cd selector
+
+            # 🔥 FIX: remove old ESP32 target state
+            rm -rf build sdkconfig sdkconfig.old
+
+            # Set correct target
             idf.py set-target esp32s3
+
+            # Build project
             idf.py build -v
 
+      # Upload firmware artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: selector-build
+          name: selector-esp32s3-build
           path: |
-            selector/build/**/*.bin
+            selector/build/bootloader/bootloader.bin
+            selector/build/partition_table/partition-table.bin
+            selector/build/heltec_v4_selector.bin
+            selector/build/ota_data_initial.bin
