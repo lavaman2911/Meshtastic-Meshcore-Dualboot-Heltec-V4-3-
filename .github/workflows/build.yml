@@ -9,35 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
+      # Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ESP-IDF setup + build
-      - name: Build ESP32-S3 project
+      # Build ESP-IDF project
+      - name: Build selector
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
-          command: |
-            bash -lc "
-              set -e
+          run_args: |
+            cd selector
 
-              cd selector
+            rm -rf build sdkconfig sdkconfig.old
 
-              echo '🧹 Cleaning old build'
-              rm -rf build sdkconfig sdkconfig.old
+            idf.py set-target esp32s3
+            idf.py build
 
-              echo '🎯 Setting target ESP32-S3'
-              idf.py set-target esp32s3
+            echo "Build output:"
+            ls -R build
 
-              echo '⚙️ Building project'
-              idf.py build
-
-              echo '📦 Listing output files'
-              find build -type f -name '*.bin' -o -name '*.elf'
-            "
-
-      # Upload artifacts (FIXED PATH)
+      # Upload artifacts
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
