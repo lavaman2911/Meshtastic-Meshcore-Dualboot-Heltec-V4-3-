@@ -1,0 +1,33 @@
+name: Build Selector
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: ESP-IDF build
+      uses: espressif/esp-idf-ci-action@v1
+      with:
+        esp_idf_version: v5.2
+
+    - name: Build selector
+      run: |
+        cd selector
+        idf.py set-target esp32s3
+        idf.py build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: selector-build
+        path: |
+          selector/build/bootloader/bootloader.bin
+          selector/build/partition_table/partition-table.bin
+          selector/build/ota_data_initial.bin
+          selector/build/*.bin
