@@ -1,4 +1,4 @@
-name: Build ESP32-S3 Dualboot Selector (Clean)
+name: Build ESP32-S3 Dualboot Selector (Stable)
 
 on:
   workflow_dispatch:
@@ -9,30 +9,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
+      # Checkout repo
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. ESP-IDF setup
-      - name: Setup ESP-IDF
+      # ESP-IDF setup + build
+      - name: Build ESP32-S3 project
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.2
-          run_args: |
+          command: |
             bash -lc "
+              set -e
+
               cd selector
 
-              echo '🧹 Clean previous build'
+              echo '🧹 Cleaning old build'
               rm -rf build sdkconfig sdkconfig.old
 
-              echo '🎯 Set target ESP32-S3'
+              echo '🎯 Setting target ESP32-S3'
               idf.py set-target esp32s3
 
-              echo '⚙️ Build project'
+              echo '⚙️ Building project'
               idf.py build
+
+              echo '📦 Listing output files'
+              find build -type f -name '*.bin' -o -name '*.elf'
             "
 
-      # 3. Upload ONLY correct ESP32-S3 artifacts
+      # Upload artifacts (FIXED PATH)
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
