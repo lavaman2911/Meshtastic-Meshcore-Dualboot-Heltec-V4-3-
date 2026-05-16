@@ -21,16 +21,16 @@ jobs:
           command: |
             cd selector
 
-            # 🔥 FIX: remove old ESP32 target state
+            # 🔥 FORCE CLEAN STATE (fix esp32 → esp32s3 conflict)
             rm -rf build sdkconfig sdkconfig.old
 
             # Set correct target
             idf.py set-target esp32s3
 
-            # Build project
-            idf.py build -v
+            # Build (NO -v flag, ESP-IDF CLI is strict)
+            idf.py build
 
-      # Upload firmware artifacts
+      # Upload build output
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
